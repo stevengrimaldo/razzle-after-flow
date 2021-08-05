@@ -3,21 +3,6 @@ const packageJson = require('./package.json');
 const workspaces = packageJson.workspaces;
 
 module.exports = {
-  modifyBabelOptions: () => ({
-    plugins: [
-      [
-        'babel-plugin-styled-components',
-        {
-          displayName: false,
-          fileName: true,
-          minify: true,
-          pure: true,
-          ssr: true,
-        },
-      ],
-    ],
-    presets: ['razzle/babel', '@babel/preset-flow'],
-  }),
   modifyWebpackConfig({
     env: {
       target, // the target 'node' or 'web'
@@ -45,6 +30,12 @@ module.exports = {
 
       return rule;
     });
+
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@global': path.resolve('./client/src/global'),
+      '@layouts': path.resolve('./client/src/layouts'),
+    };
 
     config.resolve.fallback = {
       fs: false,
