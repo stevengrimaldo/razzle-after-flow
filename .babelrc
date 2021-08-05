@@ -1,0 +1,16 @@
+{
+  "plugins": [
+    "after",
+    [
+      "styled-components",
+      {
+        "displayName": false,
+        "fileName": true,
+        "minify": true,
+        "pure": true,
+        "ssr": true
+      }
+    ]
+  ],
+  "presets": ["@babel/preset-flow", "razzle/babel"]
+}

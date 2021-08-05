@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+
+##
+# Description: Run a command in all sub-projects
+##
+
+__dirname="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__filename="$(basename "${BASH_SOURCE[0]}")"
+__projectRoot="$(git rev-parse --show-toplevel)"
+
+runParallel='y'
+shouldRunInShell='n'
+
+source "${__dirname}/_/textFormatting.sh"
+
+showHelp() {
+	cat <<-EOF |
+	Usage: ${__filename} ...commands
+
+	Runs yarn commands in all project folders
+
+	Options:
+	-h, --help      show this help text
+	-p, --parallel  run next commands in parallel (the default)
+	-s, --serial    run next commands in serial
+
+	Examples:
+	  Install dependencies in all project folders:
+	    ${__filename} install
+
+EOF
+
+	sed s/\$\{__filename\}/"${__filename}"/g
+}
+
+getProjectFolders() {
+	for folder in ./*/package.json; do
+		dirname "$folder"
+	done
+}
+
+runAll() {
+	local command="$1"
+	local projectFolders=(`getProjectFolders`)
+	local projectColors=(
+		$green
+		$magenta
+		$cyan
+		$blue
+		$red
+		$yellow
+	)
+	local subprocessPIDs=''
+	local isSuccess=1
+
+	# Run command in all project folders
+	for i in "${!projectFolders[@]}"; do
+		local projectFolder="${projectFolders[$i]}"
+		local projectName="$(basename ${projectFolder})"
+		pushd "${__projectRoot}/${projectFolder}" > /dev/null
+
+		local color="${projectColors[(( $i % ${#projectColors[@]} ))]}"
+		local prefix="$(printf "${color}%-8.8s |${reset} " "${projectName}")"
+
+		if [[ "$runParallel" == '' || "$command" == 'install' || "$command" == 'add' ]]; then
+      if [[ "$shouldRunInShell" == 'y' ]]; then
+        $command | sed "s/^/${prefix}/"
+      else
+			  yarn $command | sed "s/^/${prefix}/"
+      fi
+		else
+      if [[ "$shouldRunInShell" == 'y' ]]; then
+          $command | sed "s/^/${prefix}/" &
+      else
+			  yarn $command | sed "s/^/${prefix}/" &
+      fi
+			subprocessPIDs="${subprocessPIDs} $!"
+		fi
+		popd > /dev/null
+	done
+
+	# Wait on commands to finish.  Stop if a command fails.
+	for pid in $subprocessPIDs; do
+		# In bash, zero is truthy and non-zero is falsy
+		wait $pid || isSuccess=0
+	done
+
+	# Reset flag to no for next argument
+	shouldRunInShell='n'
+
+	if (( ! $isSuccess )); then
+		exit 1
+	fi
+}
+
+main() {
+	# Loop over all arguments supplied
+	while (( $# > 0 )); do
+		local arg="$1"
+
+		case $arg in
+			-e|--exec) shouldRunInShell='y';;
+			-h|--help) showHelp; exit;;
+			-p|--parallel) runParallel='y';;
+			-s|--serial) runParallel='';;
+      --list) getProjectFolders; exit;;
+			*) runAll "${arg}";;
+		esac
+
+		shift
+	done
+}
+
+main "$@"

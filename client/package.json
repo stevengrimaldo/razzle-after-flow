@@ -1,0 +1,16 @@
+{
+  "author": "me",
+  "devDependencies": {},
+  "dependencies": {},
+  "esnext": "src/index.js",
+  "license": "MIT",
+  "name": "@me/client",
+  "private": true,
+  "scripts": {
+    "flow": "flow",
+    "lint": "esw -f stylish --color src",
+    "lint:watch": "yarn lint -- --watch",
+    "verify": "yarn lint && yarn flow"
+  },
+  "version": "1.0.0"
+}

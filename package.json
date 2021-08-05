@@ -1,0 +1,62 @@
+{
+  "dependencies": {
+    "@jaredpalmer/after": "^3.1.3",
+    "razzle": "^4.0.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.3.0"
+  },
+  "devDependencies": {
+    "@babel/preset-flow": "^7.14.5",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-after": "^3.1.3",
+    "babel-plugin-styled-components": "^1.12.0",
+    "babel-preset-razzle": "^4.0.5",
+    "eslint": "^7.28.0",
+    "eslint-plugin-flowtype": "^5.7.2",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-watch": "^7.0.0",
+    "flow-bin": "^0.119.1",
+    "html-webpack-plugin": "^5.3.2",
+    "http-proxy-middleware": "^1.0.1",
+    "mini-css-extract-plugin": "^2.1.0",
+    "npm-run-all": "^4.1.5",
+    "path-browserify": "^1.0.1",
+    "razzle-dev-utils": "^4.0.5",
+    "razzle-plugin-flow": "^1.0.0",
+    "trash-cli": "^3.0.0",
+    "webpack": "^5.48.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "license": "MIT",
+  "name": "razzle-after-flow",
+  "private": true,
+  "repository": "https://github.com/stevengrimaldo/razzle-after-flow",
+  "scripts": {
+    "build": "razzle build",
+    "clean": "run-p clean:*",
+    "clean:build": "trash build",
+    "clean:root": "trash node_modules",
+    "clean:workspaces": "yarn go --exec 'rm -rf node_modules'",
+    "client": "cd client && yarn",
+    "deploy": "pm2 deploy",
+    "dev": "razzle start",
+    "flow": "yarn go flow",
+    "go": "./.admin/go",
+    "lint": "yarn go lint",
+    "postclean": "rm yarn.lock",
+    "server": "cd server && yarn",
+    "start": "mkdir -p ./build/public && razzle start",
+    "start:prod": "yarn server start",
+    "verify": "yarn lint && yarn flow"
+  },
+  "version": "1.0.0",
+  "workspaces": [
+    "client",
+    "server"
+  ]
+}

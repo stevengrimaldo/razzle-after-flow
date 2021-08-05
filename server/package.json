@@ -1,0 +1,19 @@
+{
+  "author": "me",
+  "dependencies": {
+    "@me/client": "^1.0.0",
+    "express": "^4.17.1"
+  },
+  "license": "MIT",
+  "main": "../build/server.js",
+  "name": "@me/server",
+  "private": true,
+  "scripts": {
+    "flow": "flow",
+    "lint": "esw -f stylish --color src",
+    "lint:watch": "yarn lint -- --watch",
+    "verify": "yarn lint && yarn flow",
+    "start": "node ."
+  },
+  "version": "1.0.0"
+}
