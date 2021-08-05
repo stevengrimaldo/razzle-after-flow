@@ -46,14 +46,6 @@ module.exports = {
       return rule;
     });
 
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@components/3.0': path.resolve('./client/src/components/3.0'),
-      '@components/4.0': path.resolve('./client/src/components/4.0'),
-      '@global': path.resolve('./client/src/global'),
-      '@layouts': path.resolve('./client/src/layouts'),
-    };
-
     config.resolve.fallback = {
       fs: false,
       path: require.resolve('path-browserify'),
