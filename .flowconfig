@@ -8,7 +8,6 @@
 */src
 
 [options]
-
 esproposal.optional_chaining=enable
 module.name_mapper='^@global\/\(.*\)$' -> '<PROJECT_ROOT>/client/src/global/\1'
 module.name_mapper='^@global$' -> '<PROJECT_ROOT>/client/src/global'
