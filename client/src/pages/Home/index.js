@@ -3,7 +3,7 @@ import React from 'react';
 import { PageLayout } from '@layouts';
 
 type Props = {
-  test: boolean | null | undefined,
+  test: boolean | null,
 };
 
 const Home = ({ test }: Props) => (
