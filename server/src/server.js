@@ -1,9 +1,6 @@
 import express from 'express';
 import path from 'path';
 
-// Routes
-import { page } from './routes';
-
 // Middlewares
 import { error, loader } from './middlewares';
 

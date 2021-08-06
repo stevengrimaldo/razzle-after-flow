@@ -12,5 +12,5 @@
       }
     ]
   ],
-  "presets": ["@babel/preset-flow", "razzle/babel"]
+  "presets": ["razzle/babel", "@babel/preset-flow"]
 }

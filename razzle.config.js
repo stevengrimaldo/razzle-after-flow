@@ -3,6 +3,10 @@ const packageJson = require('./package.json');
 const workspaces = packageJson.workspaces;
 
 module.exports = {
+  options: {
+    enableTargetBabelrc: true, // enable to use .babelrc.node and .babelrc.web
+    verbose: true, // set to true to get more info/error output
+  },
   modifyWebpackConfig({
     env: {
       target, // the target 'node' or 'web'
@@ -42,21 +46,6 @@ module.exports = {
       path: require.resolve('path-browserify'),
     };
 
-    const jsRule = config.module.rules.find((loaderEntry) =>
-      String(loaderEntry.test).includes('(js|jsx|mjs|ts|tsx)')
-    );
-
-    const babelLoader = jsRule.use.find((useEntry) =>
-      useEntry.loader.includes('razzle-babel-loader')
-    );
-
-    babelLoader.options.plugins = [
-      'babel-plugin-after',
-      'babel-plugin-styled-components',
-    ];
-
-    babelLoader.options.presets = ['@babel/preset-flow'];
-
     if (target === 'node') {
       // Replace default server entry of ./src/server.js with server entry
       if (dev) {
@@ -83,26 +72,4 @@ module.exports = {
 
     return config;
   },
-  modifyWebpackOptions({
-    options: {
-      webpackOptions, // the default options that will be used to configure webpack/ webpack loaders and plugins
-    },
-  }) {
-    const options = webpackOptions; // stay immutable here
-    options.notNodeExternalResMatch = (request) => {
-      return /gsap/.test(request);
-    };
-    options.babelRule.include = options.babelRule.include.concat([/gsap/]);
-
-    options.babelRule.use[0].options.plugins = [
-      'babel-plugin-after',
-      'babel-plugin-styled-components',
-    ];
-
-    options.babelRule.use[0].options.presets = ['@babel/preset-flow'];
-
-    return options;
-  },
-  plugins: ['flow'],
-  presets: ['@babel/preset-flow', 'razzle/babel'],
 };

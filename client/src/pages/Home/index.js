@@ -3,7 +3,7 @@ import React from 'react';
 import { PageLayout } from '@layouts';
 
 type Props = {
-  test: ?boolean,
+  test: boolean | null | undefined,
 };
 
 const Home = ({ test }: Props) => (
@@ -13,7 +13,7 @@ const Home = ({ test }: Props) => (
 );
 
 Home.getInitialProps = async () => {
-  return { test: null };
+  return { test: true };
 };
 
 export default Home;
